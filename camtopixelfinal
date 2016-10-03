@@ -1,0 +1,39 @@
+// import processing.serial.*;
+
+
+import processing.video.*; 
+Capture cam; 
+
+void setup() { 
+  size(700, 500); 
+  cam = new Capture(this);
+  cam.start();
+} 
+final int WIDE=35;
+final int DOWN=25;
+void draw(){ 
+  if (cam.available()) { 
+    // Reads the new frame
+    cam.read();
+  } 
+  //PImage myImage = loadImage("apples.jpg");
+  image(cam, 0, 0);
+  color[] colors = new color[WIDE*DOWN];
+
+  for (int x = 0; x < WIDE; x = x + 1) {
+    for (int y = 0; y < DOWN; y = y + 1) {
+      colors[y*WIDE + x] = (int) brightness(get(x*width/WIDE, y * height/DOWN));
+    }
+  }
+
+  //for (int i = 0; i < WIDE*DOWN; i++) {
+  //  Serial.write(colors[i]);
+  //}
+  
+  for (int x = 0; x < WIDE; x = x + 1) {
+    for (int y = 0; y < DOWN; y = y + 1) {
+      fill(colors[y*WIDE + x]);
+      rect(x*width/WIDE, y*height/DOWN, width/WIDE, height/DOWN);
+    }
+  }
+}
